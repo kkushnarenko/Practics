@@ -1,0 +1,14 @@
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\1.1 УП.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\1.1 УП.AssemblyInfoInputs.cache
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\1.1 УП.AssemblyInfo.cs
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\1.1 УП.csproj.CoreCompileInputs.cache
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\bin\Debug\net7.0\1.1 УП.exe
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\bin\Debug\net7.0\1.1 УП.deps.json
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\bin\Debug\net7.0\1.1 УП.runtimeconfig.json
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\bin\Debug\net7.0\1.1 УП.dll
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\bin\Debug\net7.0\1.1 УП.pdb
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\1.1 УП.dll
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\refint\1.1 УП.dll
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\1.1 УП.pdb
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\1.1 УП.genruntimeconfig.cache
+C:\Users\Администратор\source\repos\ConsoleApp1\1.1 УП\obj\Debug\net7.0\ref\1.1 УП.dll
