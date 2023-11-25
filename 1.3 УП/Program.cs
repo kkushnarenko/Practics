@@ -18,7 +18,6 @@ public class Program
         for (int i = 2; i < lines.Length; i++)
         {
             ticketNumbers.Add(lines[i].Split(" "));
-
         }
         int WinningTicket = 0;
         string outputFileName = "output.txt";
