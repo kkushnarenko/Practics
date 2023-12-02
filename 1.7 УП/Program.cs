@@ -6,248 +6,207 @@ using Newtonsoft.Json;
 
 using static ConsoleApp1.Program2;
 
+
 namespace ConsoleApp1;
 
 public class Program2
 {
+    class Task
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime deadline { get; set; }
+    }
+
+    static List<Task> tasks = new List<Task>();
+    static string jsonFilePath = "task.json";
     static void Main(string[] args)
     {
-        List<(DateTime deadline, string task)> todoTask = new List<(DateTime deadline, string task)>();
-        
         Console.WriteLine("Это ваш ежедневник");
 
         Console.WriteLine("Выберите действие, которое хотите совершить");
         Console.WriteLine("1. Добавить задачу");
         Console.WriteLine("2. Удалить задачу");
         Console.WriteLine("3. Изменить задачу ");
-        Console.WriteLine("4. Показать задачи ");
-        Console.WriteLine("5. Показать задачи на завтра ");
-        Console.WriteLine("6. Показать задачи на неделю ");
-        Console.WriteLine("7. Показать выполненные задачи");
-        Console.WriteLine("8. Показать не выполненные задачи");
+        Console.WriteLine("4. Показать все задачи");
+        Console.WriteLine("5. Показать задачи на сегодня");
+        Console.WriteLine("6. Показать задачи на завтра");
+        Console.WriteLine("7. Показать задачи на неделю");
+        Console.WriteLine("8. Показать просроченные задачи");
+        Console.WriteLine("9. Показать актульные задачи");
         Console.WriteLine("q - выход из ежедневника");
-
 
         string userInput = Console.ReadLine();
 
-
         while (userInput != "q")
         {
-
             switch (userInput)
             {
                 case "1":
-                    addTask(todoTask, "tasks.json");
+                    addTask(tasks);
                     break;
                 case "2":
-                    removeTask(todoTask, "tasks.json");
+                    deleteTask(tasks);
                     break;
                 case "3":
-                    editTask(todoTask, "tasks.json");
+                    editTask(tasks);
                     break;
                 case "4":
-                    showTask(todoTask);
+                    showTask(tasks, DateTime.Now);
                     break;
                 case "5":
-                    showTask(todoTask);
+                    showTask(tasks, DateTime.Now.AddDays(1));
                     break;
                 case "6":
-                    showTask(todoTask);
-                    break;
-                case "7":
-                    Console.WriteLine("Выполненные задачи");
-                    compliteTask(todoTask);      
+                    showTask(tasks, DateTime.Now.AddDays(7));
                     break;
                 case "8":
-                    Console.WriteLine("Не выполненные задачи");
-                    uncompliteTask(todoTask);
+                    compliteTask();
                     break;
-
+                case "9":
+                    uncompliteTask();
+                    break;
             }
 
             Console.WriteLine("Выберите действие, которое хотите совершить");
             Console.WriteLine("1. Добавить задачу");
             Console.WriteLine("2. Удалить задачу");
             Console.WriteLine("3. Изменить задачу ");
-            Console.WriteLine("4. Показать задачи ");
-            Console.WriteLine("5. Показать задачи на завтра ");
-            Console.WriteLine("6. Показать задачи на неделю ");
-            Console.WriteLine("7. Показать выполненные задачи");
-            Console.WriteLine("8. Показать не выполненные задачи");
+            Console.WriteLine("4. Показать все задачи");
+            Console.WriteLine("5. Показать задачи на сегодня");
+            Console.WriteLine("6. Показать задачи на завтра");
+            Console.WriteLine("7. Показать задачи на неделю");
+            Console.WriteLine("8. Показать просроченные задачи");
+            Console.WriteLine("9. Показать актульные задачи");
             Console.WriteLine("q - выход из ежедневника");
 
-
             userInput = Console.ReadLine();
+            saveTask();
         }
-
     }
-
-    public static void addTask(List<(DateTime deadline, string task)> list, string fileName)
+    static void addTask(List<Task> tasks)
     {
-
-        Console.WriteLine("Добавьте ваши планы на этот день");
-
-        string taskText = Console.ReadLine();
-
-        Console.WriteLine("Введите дедлайн ");
-
+        Console.WriteLine("Введите название задачи");
+        string name = Console.ReadLine();
+        Console.WriteLine("Введите описание задачи");
+        string description = Console.ReadLine();
+        Console.WriteLine("Введите срок задачи");
         Console.WriteLine("Введите день (дд):");
         int day = Convert.ToInt32(Console.ReadLine());
-
 
         Console.WriteLine("Введите месяц (мм):");
         int month = Convert.ToInt32(Console.ReadLine());
 
-
         Console.WriteLine("Введите год (гггг):");
         int year = Convert.ToInt32(Console.ReadLine());
 
+        DateTime deadline = new DateTime(year, month, day);
 
-        Console.WriteLine("Введите время (чч:мм):");
-        string[] time = Console.ReadLine().Split(':');
-        int hour = Convert.ToInt32(time[0]);
-        int minute = Convert.ToInt32(time[1]);
+        Task task = new Task { Title = name, Description = description, deadline = deadline };
 
-        DateTime deadline = new DateTime(year, month, day, hour, minute, 0);
-
-        list.Add((deadline, taskText));
-
-        Console.WriteLine("Добавленные задачи");
-        foreach (var (deadlines, task) in list)
-        {
-            Console.WriteLine($"{deadlines} - дедлайн, задача {task}");
-
-            var json = JsonConvert.SerializeObject(list, Formatting.Indented);
-            File.WriteAllText(fileName, json);
-        }
-
-
+        tasks.Add(task);
+        Console.WriteLine("Задача добавлена");
     }
-    public static void removeTask(List<(DateTime deadline, string task)> list, string fileName)
+    static void deleteTask(List<Task> tasks)
     {
         int index = 0;
-        foreach (var (deadlines, task) in list)
+        foreach (Task task in tasks)
         {
-            Console.WriteLine($"номер задачи - {index}, задача на этот день - {task}, дедлайн {deadlines}");
+            Console.WriteLine($"номер задачи - {index}, задача на этот день - {task} ");
             index++;
         }
 
         Console.WriteLine("Введите номер задачи, чтобы удалить его");
         int choose = Convert.ToInt32(Console.ReadLine());
-        if (choose >= 0 && choose < list.Count)
+        if (choose >= 0 && choose < tasks.Count)
         {
-            list.RemoveAt(choose);
+            tasks.RemoveAt(choose);
             Console.WriteLine("Задача удалена");
         }
         else
         {
             Console.WriteLine("Неверный номер задачи");
-
-        }
-
-        Console.WriteLine("Задачи на этот день");
-        foreach (var (deadlines, task) in list)
-        {
-            Console.WriteLine($"{deadlines} - задача {task}");
-
-            var json = JsonConvert.SerializeObject(list, Formatting.Indented);
-            File.WriteAllText(fileName, json);
         }
     }
-    public static void editTask(List<(DateTime deadline, string task)> list, string fileName)
+    static void editTask(List<Task> tasks)
     {
-
         int index = 0;
-        foreach (var (deadlines, task) in list)
+        foreach (Task t in tasks)
         {
-            Console.WriteLine($"номер задачи - {index}, задача на этот день - {task}, дедлайн {deadlines}");
+            Console.WriteLine($"номер задачи - {index}, задача на этот день - {t.Title} описание {t.Description} ");
             index++;
         }
-
-        Console.WriteLine("Введите номер задачи, чтобы удалить его");
+        Console.WriteLine("Введите номер задачи, чтобы изменить его");
         int choose = Convert.ToInt32(Console.ReadLine());
-        if (choose >= 0 && choose < list.Count)
+        if (choose >= 0 && choose < tasks.Count)
         {
-            list.RemoveAt(choose);
-            string edit = Console.ReadLine();
-            string taskText = Console.ReadLine();
-
-            Console.WriteLine("Введите дедлайн ");
-
-            Console.WriteLine("Введите день (дд):");
-            int day = Convert.ToInt32(Console.ReadLine());
-
-
-            Console.WriteLine("Введите месяц (мм):");
-            int month = Convert.ToInt32(Console.ReadLine());
-
-
-            Console.WriteLine("Введите год (гггг):");
-            int year = Convert.ToInt32(Console.ReadLine());
-
-
-            Console.WriteLine("Введите время (чч:мм):");
-            string[] time = Console.ReadLine().Split(':');
-            int hour = Convert.ToInt32(time[0]);
-            int minute = Convert.ToInt32(time[1]);
-
-            DateTime deadline = new DateTime(year, month, day, hour, minute, 0);
-
-            list.Add((deadline, taskText));
-            Console.WriteLine("Задача изменина");
+            tasks.RemoveAt(choose);
         }
         else
         {
             Console.WriteLine("Неверный номер задачи");
-
         }
-        Console.WriteLine("Задачи на этот день");
-        foreach (var (deadlines, task) in list)
-        {
-            Console.WriteLine($"{deadlines} {task}");
 
-            var json = JsonConvert.SerializeObject(list, Formatting.Indented);
-            File.WriteAllText(fileName, json);
+        Console.WriteLine("Введите название задачи");
+        string name = Console.ReadLine();
+        Console.WriteLine("Введите описание задачи");
+        string description = Console.ReadLine();
+        Console.WriteLine("Введите срок задачи (дд:мм:гггг)");
+        Console.WriteLine("Введите день (дд):");
+        int day = Convert.ToInt32(Console.ReadLine());
+
+        Console.WriteLine("Введите месяц (мм):");
+        int month = Convert.ToInt32(Console.ReadLine());
+
+        Console.WriteLine("Введите год (гггг):");
+        int year = Convert.ToInt32(Console.ReadLine());
+
+        DateTime deadline = new DateTime(year, month, day);
+
+        var task = new Task { Title = name, Description = description, deadline = deadline };
+
+        tasks.Append(task);
+        Console.WriteLine("Задача изменена");
+    }
+    static void showTask(List<Task> tasks, DateTime time) 
+    {
+        Console.WriteLine("Список задач");
+        foreach(Task t in tasks)
+        {
+            Console.WriteLine($"Название задачи: {t.Title}, описание: {t.Description}, дата: {t.deadline}");
         }
     }
-    public static void showTask(List<(DateTime deadline, string task)> list)
+
+    static void compliteTask()
     {
-        if (list.Count == 0)
+        Console.WriteLine("Просроченные задачи:");
+
+        DateTime Time = DateTime.Now;
+        
+        foreach(Task t in tasks)
         {
-            Console.WriteLine("Задач нет");
-        }
-        else
-        {
-            for (int i = 0; i < list.Count; i++)
+            if(t.deadline < Time)
             {
-                Console.WriteLine($"{i + 1} Задачи {list[i]}");
+                Console.WriteLine($"Название: {t.Title}, Описание: {t.Description}, Дата завершения: {t.deadline}");
             }
         }
     }
-    public static void compliteTask(List<(DateTime deadline, string task)> list)
+    static void uncompliteTask()
     {
-        DateTime today = DateTime.Now;
+        Console.WriteLine("Актуальные задачи");
+        DateTime Time = DateTime.Now;
 
-        foreach (var (deadlines, task) in list)
+        foreach (Task t in tasks)
         {
-            if (today >= deadlines)
+            if (t.deadline > Time)
             {
-                Console.WriteLine($"Сегодня {today}");
-                Console.WriteLine($"{deadlines} задача '{task}'прошел дедлайн ");
+                Console.WriteLine($"Название: {t.Title}, Описание: {t.Description}, Дата завершения: {t.deadline}");
             }
         }
     }
-    public static void uncompliteTask(List<(DateTime deadline, string task)> list)
+    static void saveTask()
     {
-        DateTime today = DateTime.Now;
-
-        foreach (var (deadlines, task) in list)
-        {
-            if (today < deadlines)
-            {
-                Console.WriteLine($"Сегодня {today}");
-                Console.WriteLine($"{deadlines} задача '{task}'не прошел дедлайн ");
-            }
-        }
+        File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(tasks, Formatting.Indented));
     }
 }
+
